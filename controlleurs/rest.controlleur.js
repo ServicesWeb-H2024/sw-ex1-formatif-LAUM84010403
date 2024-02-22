@@ -6,24 +6,27 @@ const model = require('../models/rest.model');
 module.exports = {
 
     afficherListe: (req, res) => {
-        const typeTitre = req.params.type_titre;
+
+        // Vérifie si le type de titre est valide
+        if (req.params.type_titre !== 'film' && req.params.type_titre !== 'serie') {
+            return res.status(400).json({ error: `Le type '${typeTitre}' est invalide, nos seul choix actuel sont [film] et [serie]` });
+        }
+
+        if (req.params.type_titre == 'film') {
+            typeTitre = "Movie";
+        }
+        if (req.params.type_titre == 'serie') {
+            typeTitre = "TV Show";
+        }
+
         const page = req.query.page;
+
         const limit = 10;
         const offset = (page) * limit;
 
-        if (typeTitre !== 'film' && typeTitre !== 'serie') {
-            return res.status(400).json({ error: `Le type '${typeTitre}' est invalide` });
-        }
-
-        // Vérifie si le type de titre est valide
-        if (typeTitre !== 'film' && typeTitre !== 'serie') {
-            return res.status(400).json({ error: `Le type '${typeTitre}' est invalide` });
-        }
-
-        model.afficherListeBD(typeTitre, page, offset)
 
 
-        model.afficherListeBD()
+        model.afficherListeBD(typeTitre, parseInt(page), offset)
         .then(result => {
             res.send(result);
         })

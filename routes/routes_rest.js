@@ -10,8 +10,6 @@ const app = express();
 const controller = require('../controlleurs/rest.controlleur');
 
 
-//PAGE D'ACCEUIL DE /api/titres
-
 routeur.get('/:type_titre', controller.afficherListe);
 
 module.exports = routeur;
