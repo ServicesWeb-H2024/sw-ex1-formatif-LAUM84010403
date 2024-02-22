@@ -19,16 +19,22 @@ module.exports = {
             typeTitre = "TV Show";
         }
 
-        const page = req.query.page;
+        const page = parseInt(req.query.page)
+        
 
         const limit = 10;
         const offset = (page) * limit;
 
 
 
-        model.afficherListeBD(typeTitre, parseInt(page), offset)
+        model.afficherListeBD(typeTitre, page, offset)
         .then(result => {
             res.send(result);
+            res.status(200).json({
+                filtre : req.params.type_titre,
+                page : page,
+                url_page_suivante : "/api/titres/" + req.params.type_titre + "?page=" + (page+1)
+            });
         })
             .catch(error => {
                 console.error('Erreur lors de la récupération des film :', error);
