@@ -20,20 +20,17 @@ module.exports = {
         }
 
         const page = parseInt(req.query.page)
-        
 
         const limit = 10;
-        const offset = (page) * limit;
+        const offset = (page - 1) * limit;
 
-
-
-        model.afficherListeBD(typeTitre, page, offset)
+        model.afficherListeBD(typeTitre, offset)
         .then(result => {
-            res.send(result);
             res.status(200).json({
-                filtre : req.params.type_titre,
-                page : page,
-                url_page_suivante : "/api/titres/" + req.params.type_titre + "?page=" + (page+1)
+                result: result,
+                filtre: req.params.type_titre,
+                page: page,
+                url_page_suivante: "/api/titres/" + req.params.type_titre + "?page=" + (page + 1)
             });
         })
             .catch(error => {
